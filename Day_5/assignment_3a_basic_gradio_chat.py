@@ -32,13 +32,21 @@ def stream_basic_chat(
     # messages=build_multimodal_messages(history, message)
     # stream=True
     # extra_body={"provider": {"data_collection": "deny"}}
-    response = None
+    response = client.chat.completions.create(
+        model=DEFAULT_MODEL,
+        messages=build_multimodal_messages(history, message),
+        stream=True,
+        extra_body={"provider": {"data_collection": "deny"}},
+    )
+    
 
     answer = ""
     for chunk in response:
         delta = chunk.choices[0].delta.content
         if delta:
             # TODO 2: add delta to answer and yield the growing answer.
+            answer += delta
+            yield answer
             pass
 
 
@@ -51,6 +59,14 @@ def build_demo() -> gr.ChatInterface:
     # title=APP_TITLE
     # textbox=gr.MultimodalTextbox(file_types=["image"])
     # additional_inputs=[gr.Textbox(label="OpenRouter API Key", type="password")]
+    return gr.ChatInterface(
+        fn=stream_basic_chat,
+        # type="messages",
+        multimodal=True,
+        title=APP_TITLE,
+        textbox=gr.MultimodalTextbox(file_types=["image"]),
+        additional_inputs=[gr.Textbox(label="OpenRouter API Key", type="password")]
+    )
     raise NotImplementedError
 
 

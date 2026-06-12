@@ -20,6 +20,7 @@ MODEL_CHOICES = [
 APP_TITLE = "Day 3 Vision Chat"
 
 
+# deal with cleaning the model output if it contains some extra/special tokens
 def clean_model_text(text: str) -> str:
     """Remove occasional chat-template tokens returned by some routed models."""
     for token in ("<s>", "<|im_start|>", "<|im_end|>", "<|OUT|>"):
@@ -27,6 +28,7 @@ def clean_model_text(text: str) -> str:
     return text
 
 
+# takes the file_value and returns the contents
 def get_file_path(file_value: Any) -> str | None:
     """Gradio file values can be strings, dictionaries, or tempfile-like objects."""
     if not file_value:
@@ -35,9 +37,11 @@ def get_file_path(file_value: Any) -> str | None:
         return file_value
     if isinstance(file_value, dict):
         return file_value.get("path") or file_value.get("name")
+    # file_path.path or file_path.name
     return getattr(file_value, "path", None) or getattr(file_value, "name", None)
 
 
+# takes in a file_path, if it's an image, download the image and return
 def image_file_to_data_url(file_path: str) -> str:
     path = Path(file_path)
     mime_type, _ = mimetypes.guess_type(path.name)
@@ -48,6 +52,7 @@ def image_file_to_data_url(file_path: str) -> str:
     return f"data:{mime_type};base64,{encoded}"
 
 
+# 
 def user_message_to_openrouter_content(message: dict[str, Any]) -> str | list[dict[str, Any]]:
     text = (message.get("text") or "").strip()
     files = message.get("files") or []

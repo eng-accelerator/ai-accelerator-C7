@@ -1,0 +1,38 @@
+# Local environment variables
+.env
+*.env
+Day_5/.env
+
+# Python cache and compiled files
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directories
+.venv/
+venv/
+env/
+ENV/
+
+# Distribution/build artifacts
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# macOS files
+.DS_Store
+
+# Editor swap/temp files
+*.swp
+*~
+
+# Logs
+*.log
+
+# Optional: local Python wheel or shared object files
+*.so
